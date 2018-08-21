@@ -64,11 +64,19 @@ const USERS = [
 //  4. if matching user found, add the user object to the request object
 //     (aka, `req.user = matchedUser`)
 function gateKeeper(req, res, next) {
-  // your code should replace the line below
+  // my code:
+  const {user, pass} = Object.assign(
+    {user: null, pass: null}, queryString.parse(req.get('x-username-and-password')));
+  
+  req.user = USERS.find(
+    (usr, index) => usr.userName === user && usr.password === pass);
+  
+  
   next();
 }
 
-// Add the middleware to your app!
+// Adding ze middleware:
+app.use(gateKeeper);
 
 // this endpoint returns a json object representing the user making the request,
 // IF they supply valid user credentials. This endpoint assumes that `gateKeeper` 
